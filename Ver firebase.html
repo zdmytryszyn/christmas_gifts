@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wheel of Fortune</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Candara', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('c:/Users/zores/Downloads/noelle-BK4rszchcE4-unsplash.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        #particles-js {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            z-index: -1;
+        }
+
+        #wheel-container,
+        #result-container,
+        #countdown-container,
+        #participant-selection {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            color: #d01313;
+            background-color: rgba(255, 255, 255, 0.7);
+            margin: 20px;
+            display: inline-block;
+            box-sizing: border-box; /* Add this line */
+        }
+
+        h1 {
+            font-size: 38px;
+            margin: 0; /* Add this line */
+        }
+
+        button {
+            font-size: 26px;
+            font-family: 'Candara', sans-serif;
+            color: #fff;
+            background-color: #d01313;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        select {
+            font-size: 18px;
+            font-family: 'Candara', sans-serif;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        #countdown-container,
+        #result-container {
+    display: none;
+    font-size: 32px;
+    font-family: 'Candara', sans-serif;
+    margin-top: 20px;
+    color: #d01313;
+    overflow: hidden;
+    box-sizing: border-box;
+    background-color: rgba(255, 255, 255, 0.7);
+    text-align: center; /* Add this line to align text to the left */
+    padding-left: 20px; /* Add this line for additional left padding */
+}
+    </style>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+</head>
+
+<body>
+    <audio id="background-music" loop>
+        <source src="song.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div id="particles-js"></div>
+
+    <div id="wheel-container">
+        <h1>Już wiesz czyim jesteś Mikołajem. <br> Żeby poznać świąteczne życzenia tej osoby <br> wybierz jej imię na liście poniżej: <br> (PS. pamiętaj, że budżet na 1 osobę to maks. 150 zł) </h1>
+        <div id="participant-selection">
+            <select id="participantsDropdown">
+                <option value="Zorika">Zorik</option>
+                <option value="Uli">Ula</option>
+                <option value="Moniki">Monika</option>
+                <option value="Marcina">Marcin</option>
+                <option value="Grażyny">Grażyna</option>
+                <option value="Piotrka">Piotrek</option>
+                <option value="Neli">Nela</option>
+            </select>
+            <button onclick="startCountdown()">ZACZYNAMY</button>
+        </div>
+    </div>
+
+    <div id="countdown-container">
+        <!-- Countdown will be displayed here -->
+    </div>
+
+    <div id="result-container">
+        <!-- Result will be displayed here -->
+    </div>
+
+    <script>
+        document.addEventListener('click', function () {
+            const audio = document.getElementById('background-music');
+            audio.muted = false;
+            if (audio.paused) {
+                audio.play();
+            }
+        });
+
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: '#ffffff' },
+                shape: { type: 'image', image: { src: 'snow.png', width: 20, height: 20 } },
+                opacity: { value: 0.5, random: false, anim: { enable: false, speed: 1, opacity_min: 0.1, sync: false } },
+                size: { value: 15, random: true, anim: { enable: false, speed: 40, size_min: 0.1, sync: false } },
+                line_linked: { enable: false },
+                move: { enable: true, speed: 1, direction: 'bottom', random: false, straight: false, out_mode: 'out', bounce: false, attract: { enable: false, rotateX: 600, rotateY: 1200 } }
+            },
+            interactivity: { detect_on: 'canvas', events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' }, resize: true }, modes: { grab: { distance: 400, line_linked: { opacity: 1 } }, bubble: { distance: 400, size: 40, duration: 2, opacity: 8, speed: 3 }, repulse: { distance: 200, duration: 0.4 }, push: { particles_nb: 4 }, remove: { particles_nb: 2 } } },
+            retina_detect: true
+        });
+
+        function startCountdown() {
+            const wheelContainer = document.getElementById("wheel-container");
+            const countdownContainer = document.getElementById("countdown-container");
+            const participantSelection = document.getElementById("participant-selection");
+
+            wheelContainer.style.display = "none";
+            participantSelection.style.display = "none";
+            countdownContainer.style.display = "block";
+
+            let count = 8;
+
+            const countdownInterval = setInterval(() => {
+                countdownContainer.innerText = count;
+
+                if (count === 0) {
+                    clearInterval(countdownInterval);
+                    countdownContainer.style.display = "none";
+                    showResult();
+                }
+
+                count--;
+            }, 1000);
+        }
+
+        function showResult() {
+            const participants = [
+                "Zorika",
+                "Uli",
+                "Moniki",
+                "Marcina",
+                "Grażyny",
+                "Piotrka",
+                "Neli"
+            ];
+
+            const presents = {
+                "Zorika": ["Prezent 1:   Książka 'Predictably irrational' Dan Ariely (dostępna np. w Empiku online)", "Prezent 2:   Gra planszowa 'Catan' lub 'Rummikub' (wszystkie dostępne np. w Empiku online)"],
+                "Uli": ["Prezent 1:   Raczki na buty (rozm. 37) - raczki, nie raki (dostępne np. w sklepie Decathlon)", "Prezent 2:   Szkatułka na biżuterię", "Prezent 3:   Łyżka do butów długa"],
+                "Moniki": ["Prezent 1:   Kalosze rozmiar 39", "Prezent 2:   Lusterko do makijażu", "Prezent 3:   Odżywka do włosów lub ułatwiająca rozczesywanie"],
+                "Marcina": ["Prezent 1:   Olejek 100 ml eteryczny firmy MAYJAM zapach Bergamotka oraz/lub zapach Lawenda", "Prezent 2:   Rękawiczki do morsowania (działające na ekran dotykowy telefonu) rozmiar L (wszystko łatwo dostępne na Allegro)"],
+                "Grażyny": ["Prezent 1:   Krem do twarzy Sylveco brzozowo-rokitnikowy", "Prezent 2:   Bodyshop masło do ciała do bardzo suchej skóry"],
+                "Piotrka": ["Prezent 1:   Benzyna Zippo do zapalniczki", "Prezent 2:   Skarpetki kolorowe rozm. 45", "Prezent 3:   Filiżanki do espresso"],
+                "Neli": ["Prezent 1:   Farba do włosów 'Syoss' Nr. 8-05. Kolor beżowy", "Prezent 2:   Krem do cery dojrzałej (noc lub dzień)", "Prezent 3:   Ładna filiżanka do herbaty"],
+            };
+
+            const selectedParticipant = document.getElementById("participantsDropdown").value;
+            const selectedPresents = presents[selectedParticipant];
+
+            const resultContainer = document.getElementById("result-container");
+            resultContainer.innerHTML = `Gratulacje!<br>Będziesz Mikołajem dla<br><span style="font-size: 52px; font-weight: bold;">${selectedParticipant}</span>.<br>Życzenia ${selectedParticipant} pod choinkę: <br>${selectedPresents.join("<br>")}.`;
+            resultContainer.style.display = "block";
+        }
+    </script>
+</body>
+
+</html>
